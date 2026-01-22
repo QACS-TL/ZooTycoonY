@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace CSharpZooTycoonLibrary
 {
-    public class Animal
+    public abstract class Animal
     {
         public static int id { get; set; } = 0;
         private static readonly HashSet<string> AllowedColours = new() { "BROWN", "BLACK", "WHITE", "ORANGE", "PURPLE", "PINK" };
@@ -85,10 +85,10 @@ namespace CSharpZooTycoonLibrary
             }
         }
 
-        public virtual string Eat(string food)
-        {
-            return $"I'm a {Type} called {Name} using some of my {_limbCount} limbs to eat {food}.";
-        }
+        public abstract string Eat(string food);
+        //{
+        //    return $"I'm a {Type} called {Name} using some of my {_limbCount} limbs to eat {food}.";
+        //}
 
         public string Move(string direction, int distance)
         {

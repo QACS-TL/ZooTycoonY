@@ -7,7 +7,7 @@ namespace CSharpZooTycoon
 {
     public class Program
     {
-        static HashSet<string> allowedSpecies = new() { "CAT", "DOG", "BIRD", "APE", "UNKNOWN" };
+        static HashSet<string> allowedSpecies = new() { "CAT", "DOG", "BIRD" };
         static HashSet<string> allowedColours = new() { "BROWN", "BLACK", "WHITE", "ORANGE", "PURPLE", "PINK" };
 
         public static List<Animal> LoadAnimals()
@@ -17,7 +17,7 @@ namespace CSharpZooTycoon
                 new Dog(name:"Fido", type:"DOG", colour:"BLACK", limbCount:4, tailLength:45.09),
                 new Cat(name:"Fifi", type:"CAT", colour:"WHITE", limbCount:5, whiskerCount:14),
                 new Bird(name:"Oscar", type:"BIRD", colour:"ORANGE", limbCount:3, wingspan:20),
-                new Animal(name:"Boris", type:"ANIMAL", colour:"PURPLE", limbCount:3)
+                //new Animal(name:"Boris", type:"ANIMAL", colour:"PURPLE", limbCount:3)
             };
             return animals;
         }
@@ -95,9 +95,9 @@ namespace CSharpZooTycoon
                     string wingspan = GetAndValidateAttributeForAdding("Wingspan");
                     animals.Add(new Bird(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), wingspan: Convert.ToInt32(wingspan)));
                     return;
-                default:
-                    animals.Add(new Animal(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount)));
-                    return;
+                //default:
+                //    animals.Add(new Animal(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount)));
+                //    return;
             }
         }
  

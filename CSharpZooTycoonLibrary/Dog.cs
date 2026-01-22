@@ -10,12 +10,10 @@ namespace CSharpZooTycoonLibrary
     {
         private double _tailLength = 0.2;
 
-        public Dog(int? id = null, string name = "Anonymous", string colour = "Brown", int limbCount = 4, double tailLength = 0.25, string type = "Dog")
-              : base(id: id, name: name, colour: colour, limbCount: limbCount, type: type)
+        public Dog(string name="Rover", string colour="Brown", int limbCount=4, double tailLength=30.6): base(name: name, type: "Dog", colour: colour, limbCount: limbCount)
         {
-            TailLength = tailLength;
+           this.TailLength = tailLength;
         }
-
 
         public double TailLength
         {
@@ -35,7 +33,9 @@ namespace CSharpZooTycoonLibrary
 
         public override string Eat(string food)
         {
-            return $"{base.ToString()}, Tail Length: {TailLength}";
+            return $"I'm a dog slobbering on {food}";
         }
+
+
     }
 }
