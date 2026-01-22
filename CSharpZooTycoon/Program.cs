@@ -14,10 +14,10 @@ namespace CSharpZooTycoon
         {
             var animals = new List<Animal>
             {
-                new Dog(name:"Fido", type:"DOG", colour:"BLACK", limbCount:4, tailLength:45.09),
-                new Cat(name:"Fifi", type:"CAT", colour:"WHITE", limbCount:5, whiskerCount:14),
-                new Bird(name:"Oscar", type:"BIRD", colour:"ORANGE", limbCount:3, wingspan:20),
-                //new Animal(name:"Boris", type:"ANIMAL", colour:"PURPLE", limbCount:3)
+                new Dog(name:"Fido", colour:"BLACK", limbCount:4, tailLength:45.09),
+                new Cat(name:"Fifi",  colour:"WHITE", limbCount:5, whiskerCount:14),
+                new Bird(name:"Oscar",  colour:"ORANGE", limbCount:3, wingspan:20),
+                new Dog(name:"Boris", colour:"PURPLE", limbCount:2)
             };
             return animals;
         }
@@ -89,7 +89,7 @@ namespace CSharpZooTycoon
                     return;
                 case "DOG":
                     string tailLength = GetAndValidateAttributeForAdding("TailLength");
-                    animals.Add(new Dog(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), tailLength: Convert.ToDouble(tailLength)));
+                    animals.Add(new Dog(name: name, colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), tailLength: Convert.ToDouble(tailLength)));
                     return;
                 case "BIRD":
                     string wingspan = GetAndValidateAttributeForAdding("Wingspan");
@@ -246,6 +246,21 @@ namespace CSharpZooTycoon
             Console.WriteLine(msg);
         }
 
+        public static void SortAnimals(List<Animal> animals)
+        {
+            animals.Sort();
+            Console.WriteLine("Animals sorted by type and name.");
+            ListAnimals(animals);
+        
+            animals.Sort(Animal.AnimalNameComparer);
+            Console.WriteLine("\nAnimals sorted by name.");
+            ListAnimals(animals);
+
+            animals.Sort(Animal.AnimalColourComparer);
+            Console.WriteLine("\nAnimals sorted by colour.");
+            ListAnimals(animals);
+        }
+
         public static void ListAnimals(List<Animal> animals)
         {
             for (int i = 0; i < animals.Count; i++)
@@ -263,7 +278,8 @@ namespace CSharpZooTycoon
             Console.WriteLine("3) Edit animal");
             Console.WriteLine("4) Remove animal");
             Console.WriteLine("5) Feed animal");
-            Console.WriteLine("6) Exit");
+            Console.WriteLine("6) Sort animals");
+            Console.WriteLine("7) Exit");
         }
 
         public static string InputDetail(string prompt)
@@ -298,6 +314,9 @@ namespace CSharpZooTycoon
                         FeedAnimal(animals);
                         break;
                     case "6":
+                        SortAnimals(animals);
+                        break;
+                    case "7":
                         Console.WriteLine("Goodbye — saving and exiting.");
                         return;
                     default:

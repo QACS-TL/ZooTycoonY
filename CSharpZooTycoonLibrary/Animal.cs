@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace CSharpZooTycoonLibrary
 {
-    public abstract class Animal
+    public abstract class Animal: IComparable<Animal>
     {
         public static int id { get; set; } = 0;
         private static readonly HashSet<string> AllowedColours = new() { "BROWN", "BLACK", "WHITE", "ORANGE", "PURPLE", "PINK" };
@@ -99,6 +99,56 @@ namespace CSharpZooTycoonLibrary
         {
             return $"Id: {Id:D3}, Name: {Name}, Species: {Type}, Colour: {Colour}, Limb Count: {LimbCount}";
         }
+
+        public int CompareTo(Animal? other)
+        {
+            return this.LimbCount - other.LimbCount;
+        }
+
+        private static NameComparer nameComparer = null;
+
+        public static IComparer<Animal> AnimalNameComparer
+        {
+            get
+            {
+                if (nameComparer == null)
+                {
+                    nameComparer = new NameComparer();
+                }
+                return nameComparer;
+            }
+        }
+
+        private class NameComparer : IComparer<Animal>
+        {
+            public int Compare(Animal? x, Animal? y)
+            {
+                return x.Name.CompareTo(y.Name);
+            }
+        }
+
+        private static ColourComparer colourComparer = null;
+
+        public static IComparer<Animal> AnimalColourComparer
+        {
+            get
+            {
+                if (colourComparer == null)
+                {
+                    colourComparer = new ColourComparer();
+                }
+                return colourComparer;
+            }
+        }
+
+        private class ColourComparer : IComparer<Animal>
+        {
+            public int Compare(Animal? x, Animal? y)
+            {
+                return x.Colour.CompareTo(y.Colour);
+            }
+        }
+
     }
 }
 
