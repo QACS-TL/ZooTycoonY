@@ -19,7 +19,7 @@ namespace CSharpZooTycoonLibrary
             set => _whiskerCount = value < 0 ? 0 : value;
         }
 
-        public new string Eat(string food)
+        public override string Eat(string food)
         {
             return $"I'm a {Type} called {Name} ignoring {food}.";
         }
