@@ -13,6 +13,11 @@ namespace CSharpZooTycoonLibrary
             WhiskerCount = whiskerCount;
         }
 
+        public Cat()
+        {
+                
+        }
+
         public int WhiskerCount
         {
             get => _whiskerCount;

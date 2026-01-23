@@ -1,11 +1,13 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System;
-using System.Collections.Generic;
 
 namespace CSharpZooTycoonLibrary
 {
@@ -21,11 +23,11 @@ namespace CSharpZooTycoonLibrary
         private int _limbCount = 0;
         private int _id = 0;
 
-        public static int GenerateNewId()
-        {
-            id += 1;
-            return id;
-        }
+        //public static int GenerateNewId()
+        //{
+        //    id += 1;
+        //    return id;
+        //}
 
         public Animal(int? id = null, string name = "Anonymous", string colour = "Brown", int limbCount = 4, string type = "Animal")
         {
@@ -33,9 +35,16 @@ namespace CSharpZooTycoonLibrary
             Colour = colour;
             LimbCount = limbCount;
             Type = type;
-            _id = id != null ? (int)id : GenerateNewId();
+            _id = id != null ? (int)id : 0;
         }
 
+        protected Animal()
+        {
+            
+        }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id
         {
             get { return _id; }
