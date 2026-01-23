@@ -328,7 +328,20 @@ namespace CSharpZooTycoon
 
         public static void Main(string[] args)
         {
-            MainMenu();
+            //MainMenu();
+
+            using (ZooTycoonContext db = new ZooTycoonContext())
+            {
+                var animals = db.Animals.ToList();
+              
+            }
+
+            //ZooTycoonContext context = new();
+            //List<Animal> animals = context.Animals.ToList();
+
+
+
+
             //List<Animal> animals = new();
             //Animal ani = new();
             //animals.Add(ani);

@@ -13,6 +13,11 @@ namespace CSharpZooTycoonLibrary
             Wingspan = wingspan;
         }
 
+        public Bird()
+        {
+            
+        }
+
         public int Wingspan
         {
             get => _wingspan;

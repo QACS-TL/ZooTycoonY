@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace CSharpZooTycoonLibrary
 {
@@ -36,6 +38,12 @@ namespace CSharpZooTycoonLibrary
             _id = id != null ? (int)id : GenerateNewId();
         }
 
+        protected Animal()
+        {
+            
+        }
+
+        [Key]
         public int Id
         {
             get { return _id; }

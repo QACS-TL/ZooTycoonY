@@ -15,6 +15,11 @@ namespace CSharpZooTycoonLibrary
            this.TailLength = tailLength;
         }
 
+        public Dog()
+        {
+            
+        }
+
         public double TailLength
         {
             get => _tailLength;
