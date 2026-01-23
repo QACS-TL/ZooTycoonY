@@ -42,34 +42,34 @@ namespace CSharpZooTycoon
         }
 
 
-        public static bool AttributeChecker(string attributeName, string value)
-        {
-            switch (attributeName)
-            {
-                case "Name":
-                    return value.Length < 2;
-                case "Type":
-                    return !allowedSpecies.Contains(value.ToUpper());
-                case "Colour":
-                    return !allowedColours.Contains(value.ToUpper());
-                case "LimbCount":
-                    return !IsNumeric(value) || (int.Parse(value) < 0);
-                case "TailLength":
-                    return !double.TryParse(value, out double tailLength) || tailLength < 0.05;
-                case "WhiskerCount":
-                    return !IsNumeric(value) || (int.Parse(value) < 0);
-                case "Wingspan":
-                    return !IsNumeric(value) || (int.Parse(value) < 10);
-                default:
-                    return true;
-            }
-        }
+        //public static bool AttributeChecker(string attributeName, string value)
+        //{
+            //switch (attributeName)
+            //{
+            //    case "Name":
+            //        return value.Length < 2;
+            //    case "Type":
+            //        return !allowedSpecies.Contains(value.ToUpper());
+            //    case "Colour":
+            //        return !allowedColours.Contains(value.ToUpper());
+            //    case "LimbCount":
+            //        return !IsNumeric(value) || (int.Parse(value) < 0);
+            //    case "TailLength":
+            //        return !double.TryParse(value, out double tailLength) || tailLength < 0.05;
+            //    case "WhiskerCount":
+            //        return !IsNumeric(value) || (int.Parse(value) < 0);
+            //    case "Wingspan":
+            //        return !IsNumeric(value) || (int.Parse(value) < 10);
+            //    default:
+            //        return true;
+            //}
+       // }
 
-        public static string GetAndValidateAttributeForAdding(string animalAttribute)
+        public static string GetAndValidateAttributeForAdding(string animalAttribute, Func<string, bool> attributeChecker)
         {
             Console.Write($"{animalAttribute}: ");
             string value = Console.ReadLine()?.Trim() ?? string.Empty;
-            while (AttributeChecker(animalAttribute, value))
+            while (attributeChecker(value))
             {
                 Console.WriteLine($"Invalid {animalAttribute}, please try again.");
                 Console.Write($"{animalAttribute}: ");
@@ -82,23 +82,23 @@ namespace CSharpZooTycoon
         public static void AddAnimal(List<Animal> animals)
         {
             Console.WriteLine("Add a new animal");
-            string name = GetAndValidateAttributeForAdding("Name");
-            string type = GetAndValidateAttributeForAdding("Type");
-            string colour = GetAndValidateAttributeForAdding("Colour");
-            string limbCount = GetAndValidateAttributeForAdding("LimbCount");
+            string name = GetAndValidateAttributeForAdding("Name", n => n.Length < 2);
+            string type = GetAndValidateAttributeForAdding("Type", t => !allowedSpecies.Contains(t.ToUpper()));
+            string colour = GetAndValidateAttributeForAdding("Colour", c => !allowedColours.Contains(c.ToUpper()));
+            string limbCount = GetAndValidateAttributeForAdding("LimbCount", lc => !IsNumeric(lc) || (int.Parse(lc) < 0));
 
             switch (type.ToUpper())
             {
                 case "CAT":
-                    string whiskerCount = GetAndValidateAttributeForAdding("WhiskerCount");
+                    string whiskerCount = GetAndValidateAttributeForAdding("WhiskerCount", wc => !IsNumeric(wc) || (int.Parse(wc) < 0));
                     animals.Add(new Cat(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), whiskerCount: Convert.ToInt32(whiskerCount)));
                     break;
                 case "DOG":
-                    string tailLength = GetAndValidateAttributeForAdding("TailLength");
+                    string tailLength = GetAndValidateAttributeForAdding("TailLength", tl => !double.TryParse(tl, out double tailLength) || tailLength < 0.05);
                     animals.Add(new Dog(name: name, colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), tailLength: Convert.ToDouble(tailLength)));
                     break;
                 case "BIRD":
-                    string wingspan = GetAndValidateAttributeForAdding("Wingspan");
+                    string wingspan = GetAndValidateAttributeForAdding("Wingspan", ws => !IsNumeric(ws) || (int.Parse(ws) < 10));
                     animals.Add(new Bird(name: name, type: type.ToUpper(), colour: colour.ToUpper(), limbCount: Convert.ToInt32(limbCount), wingspan: Convert.ToInt32(wingspan)));
                     break;
                     //default:
@@ -159,7 +159,7 @@ namespace CSharpZooTycoon
             return (animals[idx.Value], quitFlag);
         }
 
-        public static string GetAndValidateAttributeWhileEditing(string animalAttribute, string propertyName, string currentValue)
+        public static string GetAndValidateAttributeWhileEditing(string animalAttribute, Func<string, bool> attributeChecker, string propertyName, string currentValue)
         {
             Console.Write($"{propertyName} [{currentValue}]: ");
             string input = Console.ReadLine()?.Trim() ?? string.Empty;
@@ -168,7 +168,7 @@ namespace CSharpZooTycoon
             if (string.IsNullOrEmpty(input))
                 return currentValue;
 
-            while (AttributeChecker(animalAttribute, input))
+            while (attributeChecker(input))
             {
                 Console.WriteLine($"Invalid {propertyName}, please try again.");
                 Console.Write($"{propertyName} [{currentValue}]: ");
@@ -190,27 +190,25 @@ namespace CSharpZooTycoon
                 return;
 
             Console.WriteLine("Current attributes (leave blank to keep):");
-
-
-
+            
 
             using (ZooTycoonContext db = new ZooTycoonContext())
             {
                 Animal an = db.Animals.Single(a => a.Id == ani.Id);
-                an.Name = GetAndValidateAttributeWhileEditing("Name", "name", ani.Name);
-                an.Colour = GetAndValidateAttributeWhileEditing("Colour", "colour", ani.Colour);
-                string limbCount = GetAndValidateAttributeWhileEditing("LimbCount", "limb_count", ani.LimbCount.ToString());
+                an.Name = GetAndValidateAttributeWhileEditing("Name", n => n.Length < 2, "name", ani.Name);
+                an.Colour = GetAndValidateAttributeWhileEditing("Colour", c =>!allowedColours.Contains(c.ToUpper()), "colour", ani.Colour);
+                string limbCount = GetAndValidateAttributeWhileEditing("LimbCount", lc => !IsNumeric(lc) || (int.Parse(lc) < 0), "limb_count", ani.LimbCount.ToString());
                 an.LimbCount = Convert.ToInt32(limbCount);
                 switch (an)
                 {
                     case Cat cat:
-                        cat.WhiskerCount = Convert.ToInt32(GetAndValidateAttributeWhileEditing("WhiskerCount", "whiskercount", cat.WhiskerCount.ToString()));
+                        cat.WhiskerCount = Convert.ToInt32(GetAndValidateAttributeWhileEditing("WhiskerCount", wc => !IsNumeric(wc) || (int.Parse(wc) < 0),  "whiskercount", cat.WhiskerCount.ToString()));
                         break;
                     case Dog dog:
-                        dog.TailLength = Convert.ToDouble(GetAndValidateAttributeWhileEditing("TailLength", "taillength", dog.TailLength.ToString()));
+                        dog.TailLength = Convert.ToDouble(GetAndValidateAttributeWhileEditing("TailLength", tl => !double.TryParse(tl, out double tailLength) || (tailLength < 0.05), "taillength", dog.TailLength.ToString()));
                         break;
                     case Bird bird:
-                        bird.Wingspan = Convert.ToInt32(GetAndValidateAttributeWhileEditing("Wingspan", "wingspan", bird.Wingspan.ToString()));
+                        bird.Wingspan = Convert.ToInt32(GetAndValidateAttributeWhileEditing("Wingspan", ws => !IsNumeric(ws) || (int.Parse(ws) < 10), "wingspan", bird.Wingspan.ToString()));
                         break;
                 }
 
@@ -317,10 +315,11 @@ namespace CSharpZooTycoon
 
         public static void MainMenu()
         {
-            List<Animal> animals = LoadAnimals();
+            
 
             while (true)
             {
+                List<Animal> animals = LoadAnimals();
                 PrintMenu();
                 string choice = InputDetail("Choose an option");
                 switch (choice)
