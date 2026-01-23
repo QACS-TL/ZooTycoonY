@@ -22,7 +22,7 @@ namespace CSharpZooTycoonLibrary
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(local);Database=ZooTycoon;Trusted_Connection=True;Encrypt=False");
+            optionsBuilder.UseSqlServer("Server=sdfs;Database=ZooTycoon;Trusted_Connection=True;Encrypt=False");
         }
     }
 }
